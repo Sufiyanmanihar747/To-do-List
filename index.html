@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-do-list</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h1 style="text-align: center;background-color:dodgerblue;color: white;">To-do-list</h1>
+    <div class="container">
+
+        <h2 class="text-align m-1">Title</h2>
+        <div class="input">
+            <input type="text" name="Enter your name" id="title">
+        </div>
+        <h2 class="text-align m-1">Description</h2>
+        <div class="input">
+            <textarea name="" id="description" cols="30" rows="10"></textarea>
+        </div>
+        <div class="add-button">
+            <button class="add" type="submit" id="add">Add Event</button>
+        </div>
+        <div class="list">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sr No.</th>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Options</th>
+                    </tr>
+                </thead>
+                <tbody id="tablebody">
+
+                    <tr>
+                        <th>1</th>
+                        <td>get some coffee</td>
+                        <td>you</td>
+                        <td><button class="delete">Delete</button></td>
+                    </tr>
+                    <tr>
+                        <th>1</th>
+                        <td>get some coffee</td>
+                        <td>you</td>
+                        <td><button class="delete" type="">Delete</button></td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    <footer id="about" class="text-align" style="background-color: dodgerblue; color: white;">All Rights Resarve &copy;
+        MADE
+        BY SUFIYAN
+        MANIHAR</footer>
+</body>
+<script>
+    function getandupdate() {
+        console.log("Updating....");
+        title = document.getElementById('title').value;
+        description = document.getElementById('description').value;
+        if (localStorage.getItem('itemsJson') == null) {
+            itemJsonArray = [];
+            itemJsonArray.push([title, description]);
+            localStorage.setItem('itemsJson', JSON.stringify(itemJsonArray))
+        }
+        else {
+            itemJsonArraystr = localStorage.getItem('itemsJson')
+            itemJsonArray = JSON.parse(itemJsonArraystr);
+            itemJsonArray.push([title, description]);
+            localStorage.setItem('itemsJson', JSON.stringify(itemJsonArray))
+        }
+        update();
+    }
+    function update() {
+        if (localStorage.getItem('itemsJson') == null) {
+            itemJsonArray = [];
+            localStorage.setItem('itemsJson', JSON.stringify(itemJsonArray))
+        }
+        else {
+            itemJsonArraystr = localStorage.getItem('itemsJson')
+            itemJsonArray = JSON.parse(itemJsonArraystr);
+
+        }
+
+        // add into table
+        let tablebody = document.getElementById("tablebody");
+        let str = "";
+        itemJsonArray.forEach((element, index) => {
+            str += `    
+         <tr>
+         <th>${index + 1}</th>
+        <td>${element[0]}</td>
+        <td>${element[1]}</td>
+         <td><button class="delete" onclick="deleted(${index})">Delete</button></td>
+         </tr> `;
+
+        });
+        tablebody.innerHTML = str;
+    }
+    add = document.getElementById("add")
+    add.addEventListener("click", getandupdate);
+    update();
+
+    function deleted(itemIndex) {
+        console.log("Delete", itemIndex);
+        itemJsonArraystr = localStorage.getItem('itemsJson')
+        itemJsonArray = JSON.parse(itemJsonArraystr);
+        itemJsonArray.splice(itemIndex, 1);
+        localStorage.setItem('itemsJson', JSON.stringify(itemJsonArray));
+        update();
+
+    }
+</script>
+
+</html>
